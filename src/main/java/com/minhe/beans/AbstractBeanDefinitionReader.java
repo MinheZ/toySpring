@@ -1,5 +1,8 @@
 package com.minhe.beans;
 
+import com.minhe.beans.io.ResourceLoader;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,8 +15,24 @@ import java.util.Map;
 
 public abstract class AbstractBeanDefinitionReader implements BeanDefinitionReader{
     // String, BeanDefinition 保存 IoC 容器里的类定义
-    private Map<String, BeanDefinition> registery;
+    private Map<String, BeanDefinition> registry;
 
-    //private
+    /**
+     * 保存了类加载器,使用时，只需要向其 loadBeanDefinitions() 传入一个资源地址，就可以自动调用其类加载器，
+     * 并把解析到的 BeanDefinition 保存到 registry 中去。
+     */
+    private ResourceLoader resourceLoader;
 
+    protected AbstractBeanDefinitionReader(ResourceLoader resourceLoader) {
+        this.registry = new HashMap<String, BeanDefinition>();
+        this.resourceLoader = resourceLoader;
+    }
+
+    public Map<String, BeanDefinition> getRegistry() {
+        return registry;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
 }
