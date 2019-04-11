@@ -15,6 +15,7 @@ public class XmlBeanDefinitionReaderTest {
         XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(new ResourceLoader());
         xmlBeanDefinitionReader.loadBeanDefinitions("toySpring.xml");
         Map<String, BeanDefinition> registry = xmlBeanDefinitionReader.getRegistry();
+        // 如果 condition 为 false，会报错
         Assert.assertTrue(registry.size() > 0);
     }
 
