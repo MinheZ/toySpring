@@ -1,6 +1,6 @@
-package com.minhe.beans;
+package com.minhe.toySpring.beans;
 
-import com.minhe.beans.io.ResourceLoader;
+import com.minhe.toySpring.beans.io.ResourceLoader;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,11 @@
-package com.minhe.beans.xml;
+package com.minhe.toySpring.beans.xml;
 
-import com.minhe.beans.AbstractBeanDefinitionReader;
-import com.minhe.beans.BeanDefinition;
-import com.minhe.beans.io.ResourceLoader;
+
+import com.minhe.toySpring.BeanReference;
+import com.minhe.toySpring.beans.AbstractBeanDefinitionReader;
+import com.minhe.toySpring.beans.BeanDefinition;
+import com.minhe.toySpring.beans.PropertyValue;
+import com.minhe.toySpring.beans.io.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +34,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         // 获取资源输入流
         InputStream inputStream = getResourceLoader().getResource(location).getInputStream();
 
+        /**
+         * 从xml文件中读取所有bean的定义，并注册到registry中
+         * 注意: 此时bean定义里并没有实例化该bean
+         */
+        doLoadBeanDefinitions(inputStream);
     }
 
     protected void doLoadBeanDefinitions(InputStream inputStream) throws Exception {
@@ -72,7 +80,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
      * @return: void
      * @Author: MinheZ
      * @Date: 2019/4/10
-    **/
+     **/
     private void processBeanDefinition(Element ele) {
         // 获取 bean 标签的 id 属性作为 bean 的 name
         String name = ele.getAttribute("id");
@@ -89,14 +97,35 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     /**
-     * @Description:  解析 bean 标签下的 property 子标签
+     * @Description: 解析 bean 标签下的 property 子标签
      * @Param: [ele, beanDefinition]
      * @return: void
      * @Author: MinheZ
      * @Date: 2019/4/10
-    **/
+     **/
     private void processProperty(Element ele, BeanDefinition beanDefinition) {
         // 获取所有 property 标签
         NodeList propertyNodes = ele.getElementsByTagName("property");
+        for (int i = 0; i < propertyNodes.getLength(); i++) {
+            Node node = propertyNodes.item(i);
+            if (node instanceof Element) {
+                Element propertyEle = (Element) node;
+                String name = propertyEle.getAttribute("name");
+                String value = propertyEle.getAttribute("value");
+                // 这里需要判断 value 是不是引用类型
+                if (value != null && value.length() > 0) {
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
+                } else {
+                    // 否则为 ref 类型
+                    String ref = propertyEle.getAttribute("ref");
+                    if (ref == null || ref.length() == 0) {
+                        throw new IllegalArgumentException("Configuration problem: <property> element for property '"
+                                + name + "' must specify a ref or value");
+                    }
+                    BeanReference beanReference = new BeanReference(name);
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanReference));
+                }
+            }
+        }
     }
 }

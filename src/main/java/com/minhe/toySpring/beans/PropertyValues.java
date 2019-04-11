@@ -1,4 +1,4 @@
-package com.minhe.beans;
+package com.minhe.toySpring.beans;
 
 import java.util.ArrayList;
 import java.util.List;

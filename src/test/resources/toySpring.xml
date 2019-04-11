@@ -1,0 +1,9 @@
+<beans>
+    <bean id="helloWorldService" class="com.minhe.toySpring.service.impl.HelloWorldServiceImpl">
+        <property name="text" value="Hello world"/>
+        <property name="outputService" ref="outputService"/>
+    </bean>
+
+    <bean id="outputService" class="com.minhe.toySpring.service.impl.OutputServiceImpl"/>
+
+</beans>

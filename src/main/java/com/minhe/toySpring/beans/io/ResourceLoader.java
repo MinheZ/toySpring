@@ -1,4 +1,4 @@
-package com.minhe.beans.io;
+package com.minhe.toySpring.beans.io;
 
 import java.net.URL;
 
