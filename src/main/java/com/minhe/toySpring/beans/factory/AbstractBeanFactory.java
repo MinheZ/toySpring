@@ -85,7 +85,7 @@ public class AbstractBeanFactory implements BeanFactory {
         return bean;
     }
 
-    protected void applyPropertyValues(Object bean, BeanDefinition beanDefinition) {
+    protected void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
 
     }
 
